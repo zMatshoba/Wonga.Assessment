@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
+
+using Newtonsoft.Json;
 
 using RabbitMQ.Client;
 
 namespace Wonga.ServiceA
 {
-    internal class MessageSender : IDisposable
+    internal class MessageSender 
     {
         #region Constants
         private const string USER_NAME = "guest";
@@ -16,42 +14,48 @@ namespace Wonga.ServiceA
         private const string HOSTNAME = "localhost";
         private const int PORT = 5672;
         private const string VIRTUAL_HOST = "/";
-        private const string QUEUE_NAME = "queue-name";
         #endregion
 
-        private IConnection? con;
-        private IModel? channel;
-        private ConnectionFactory factory = new ConnectionFactory()
+        private readonly string queueName;
+        private readonly ConnectionFactory factory = new ()
         {
             UserName = USER_NAME,
             Password = PASSWORD,
             HostName = HOSTNAME,
-            Port = PORT,
-            VirtualHost = VIRTUAL_HOST
+            Port = PORT
         };
 
 
-        public bool CreateChannel() 
+        public MessageSender(string queue)
         {
-            con = factory.CreateConnection();
+            this.queueName = queue;
+        }
 
-            if (con.IsOpen)
+        public bool SendMessageAsync(string message)
+        {
+            try
             {
-                channel = con.CreateModel();
+                using var conn = factory.CreateConnection();
+                using var chan = conn.CreateModel();
+
+                chan.QueueDeclare(
+                    queueName,
+                    durable: true,
+                    exclusive: false,
+                    autoDelete: false,
+                    arguments: null);
+
+                var payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
+
+                chan.BasicPublish("", queueName, null, payload);
+
                 return true;
             }
-            else
-                return false;
+            catch (Exception ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
         }
 
-
-
-        public void Dispose()
-        {
-            if (channel != null)
-                channel.Close();
-            else if (con != null)
-                con.Close();
-        }
     }
 }
