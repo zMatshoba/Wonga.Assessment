@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Wonga.ServiceA\Wonga.ServiceA.csproj" />
     <ProjectReference Include="..\Wonga.ServiceB\Wonga.ServiceB.csproj" />
   </ItemGroup>
 

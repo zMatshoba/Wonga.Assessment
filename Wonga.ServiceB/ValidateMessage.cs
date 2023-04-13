@@ -16,7 +16,7 @@ namespace Wonga.ServiceB
         {
             try
             {
-                return message.Split(',')[1];
+                return message.Split(',')[1].Trim();
             }
             catch (Exception)
             {

@@ -13,9 +13,14 @@ namespace Wonga.ServiceA // Note: actual namespace depends on the project name.
 
             var message = MessageConsolidation(Console.ReadLine());
 
-            var result = send.SendMessageAsync(message) ? "Message Sent" : "Failed to send";
+            if (!String.IsNullOrEmpty(message))
+            {
+                var result = send.SendMessageAsync(message) ? "Message Sent" : "Failed to send";
+                Console.WriteLine(result);
+            }
+            else
+                Console.WriteLine("Error, No Name Was Entered...");
 
-            Console.WriteLine(result);
             Console.ReadLine();
         }
 

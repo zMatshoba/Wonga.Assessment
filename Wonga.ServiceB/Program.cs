@@ -46,7 +46,7 @@ namespace Wonga.ServiceB
                 if (ValidateMessage.Validate(message.ToString()))
                     result = $"Hello {ValidateMessage.MessageSplit(message.ToString())}, I am your father!";
                 else
-                    result = "Error...";
+                    result = "Error, Couldn't Read The Message...";
                 Console.WriteLine(result);
             };
 
