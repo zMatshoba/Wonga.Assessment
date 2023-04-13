@@ -1,6 +1,7 @@
 using NUnit.Framework;
 
 using Wonga.ServiceB;
+using Wonga.ServiceA;
 
 namespace Wonga.UnitTest
 {
@@ -49,7 +50,7 @@ namespace Wonga.UnitTest
             var result = ValidateMessage.MessageSplit(TestName);
 
             //Assert
-            Assert.Pass(result);
+            Assert.AreEqual(answer, result);
         }
 
         [Test]
@@ -57,7 +58,6 @@ namespace Wonga.UnitTest
         {
             //Arrange 
             string TestName = "Hello my name is Zola";
-            string answer = "Zola";
             //Act
             var result = ValidateMessage.MessageSplit(TestName);
 
@@ -65,5 +65,6 @@ namespace Wonga.UnitTest
             Assert.IsEmpty(result);
         }
 
+        
     }
 }
