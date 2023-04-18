@@ -38,8 +38,8 @@ namespace Wonga.ServiceB
                 exclusive: false,
                 autoDelete: false,
                 arguments: null);
-            var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += (sender, e) =>
+            var consumer = new AsyncEventingBasicConsumer(channel);
+            consumer.Received += async (sender, e) =>
             {
                 var body = e.Body.ToArray();
                 var message = JsonConvert.DeserializeObject(Encoding.UTF8.GetString(body));
@@ -47,6 +47,7 @@ namespace Wonga.ServiceB
                     result = $"Hello {ValidateMessage.MessageSplit(message.ToString())}, I am your father!";
                 else
                     result = "Error, Couldn't Read The Message...";
+                await Task.Yield();
                 Console.WriteLine(result);
             };
 

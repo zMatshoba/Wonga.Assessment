@@ -4,7 +4,7 @@ namespace Wonga.ServiceA // Note: actual namespace depends on the project name.
 {
     internal class Program
     {
-        static async void Main(string[] args)
+        static async Task Main(string[] args)
         {
             const string QUEUE_NAME = "wonga-queue";
             MessageSender send = new(QUEUE_NAME);
