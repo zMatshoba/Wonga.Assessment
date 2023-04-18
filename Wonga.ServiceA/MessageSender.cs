@@ -6,7 +6,7 @@ using RabbitMQ.Client;
 
 namespace Wonga.ServiceA
 {
-    internal class MessageSender 
+    internal class MessageSender
     {
         #region Constants
         private const string USER_NAME = "guest";
@@ -17,7 +17,7 @@ namespace Wonga.ServiceA
         #endregion
 
         private readonly string queueName;
-        private readonly ConnectionFactory factory = new ()
+        private readonly ConnectionFactory factory = new()
         {
             UserName = USER_NAME,
             Password = PASSWORD,
@@ -31,7 +31,7 @@ namespace Wonga.ServiceA
             this.queueName = queue;
         }
 
-        public bool SendMessageAsync(string message)
+        public async Task<bool> SendMessageAsync(string message)
         {
             try
             {
@@ -47,7 +47,7 @@ namespace Wonga.ServiceA
 
                 var payload = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(message));
 
-                chan.BasicPublish("", queueName, null, payload);
+                await Task.Run(() => chan.BasicPublish("", queueName, null, payload));
 
                 return true;
             }
