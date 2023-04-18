@@ -53,7 +53,6 @@ namespace Wonga.ServiceB
             channel.BasicConsume(QUEUE_NAME, autoAck: true, consumer);
 
 
-
             Console.ReadLine();
         }
 
